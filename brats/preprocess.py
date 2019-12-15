@@ -14,12 +14,10 @@ from nipype.interfaces.ants import N4BiasFieldCorrection
 
 from brats.train import config
 
-
 def append_basename(in_file, append):
     dirname, basename = os.path.split(in_file)
     base, ext = basename.split(".", 1)
     return os.path.join(dirname, base + append + "." + ext)
-
 
 def get_background_mask(in_folder, out_file, truth_name="GlistrBoost_ManuallyCorrected"):
     """
@@ -155,14 +153,14 @@ def convert_brats_data(brats_folder, out_folder, overwrite=False, no_bias_correc
     for subject_folder in glob.glob(os.path.join(brats_folder, "*", "*")):
         if os.path.isdir(subject_folder):
             subject = os.path.basename(subject_folder)
-            new_subject_folder = os.path.join(out_folder, os.path.basename(os.path.dirname(subject_folder)),
-                                              subject)
+            new_subject_folder = os.path.join(out_folder, os.path.basename(os.path.dirname(subject_folder)), subject)
             if not os.path.exists(new_subject_folder) or overwrite:
                 print("Processing Folder: ", subject_folder)
                 if not os.path.exists(new_subject_folder):
                     os.makedirs(new_subject_folder)
-                convert_brats_folder(subject_folder, new_subject_folder,
-                                     no_bias_correction_modalities=no_bias_correction_modalities)
+                convert_brats_folder(subject_folder, 
+                                    new_subject_folder,
+                                    no_bias_correction_modalities=no_bias_correction_modalities)
             else:
                 print("Folder Already Exist: ", subject_folder)
     print("Finished processing the image files.")
